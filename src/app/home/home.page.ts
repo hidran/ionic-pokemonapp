@@ -25,19 +25,25 @@ export class HomePage implements OnInit {
   async ngOnInit() {
     this.loading = await this.presentLoading();
     await this.loading.present();
-    this.pokemons$ = this.pokService.getPokemons();
+    this.pokemons$ = this.pokService.getPokemons('');
     this.pokemons$.subscribe(() => {
       this.loading.dismiss();
     });
   }
 
   async presentLoading() {
-    const loading = await this.loadingCtrl.create({
+    return await this.loadingCtrl.create({
 
       message: 'Please wait...'
 
     });
+  }
 
-    return loading;
+  filterPokemons($event) {
+    this.pokemons$ = this.pokService.getPokemons($event.target.value);
+  }
+
+  clearFilter($event) {
+
   }
 }

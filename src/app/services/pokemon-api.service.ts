@@ -19,7 +19,7 @@ export class PokemonApiService {
     this.storage.create();
   }
 
-  getPokemons(): Observable<Pokemon[]> {
+  getPokemons(pokemonName: string): Observable<Pokemon[]> {
 
     const url = environment.pokUrl + '?limit=' + environment.limit;
 
@@ -34,6 +34,9 @@ export class PokemonApiService {
             return [];
           }
           this.storage.set(POKEMON_KEY, res);
+          if (pokemonName.length > 0) {
+            res.results = res.results.filter(p => p.name.startsWith(pokemonName));
+          }
           return res.results.map(v => new Pokemon(v));
 
         }),
