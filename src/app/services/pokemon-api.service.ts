@@ -19,7 +19,7 @@ export class PokemonApiService {
     const url = environment.pokUrl + '?limit=' + environment.limit;
     return this.http.get<IResult>(url)
       .pipe(
-        map((res: IResult) => res.results.map(res => new Pokemon(res))),
+        map((resi: IResult) => resi.results.map(res => new Pokemon(res))),
         tap((res: Pokemon[]) => console.log(res))
       );
 
