@@ -4,8 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {IPokemonData, IResult} from '../interfaces/ipokemons';
 import {map, tap} from 'rxjs/operators';
-
-import {from, Observable} from 'rxjs';
+import {from, merge, Observable} from 'rxjs';
 import {Storage} from '@ionic/storage-angular';
 
 const POKEMON_KEY = 'pokemons';
@@ -16,15 +15,28 @@ const POKEMON_FAVORITE = 'pokemons-favorite';
 })
 export class PokemonApiService {
 
-  constructor(public http: HttpClient, private storage: Storage) {
+  constructor(private http: HttpClient, private storage: Storage) {
     this.storage.create();
   }
 
   getPokemons(): Observable<Pokemon[]> {
+
     const url = environment.pokUrl + '?limit=' + environment.limit;
-    return this.http.get<IResult>(url)
+
+    const cacheData = from(this.storage.get(POKEMON_KEY));
+    cacheData.subscribe(res => {
+      console.log('cache:', res);
+    });
+    return merge(cacheData, this.http.get<IResult>(url))
       .pipe(
-        map((res: IResult) => res.results.map(v => new Pokemon(v))),
+        map((res: IResult) => {
+          if (!res) {
+            return [];
+          }
+          this.storage.set(POKEMON_KEY, res);
+          return res.results.map(v => new Pokemon(v));
+
+        }),
         tap((res: Pokemon[]) => console.log(res))
       );
 
