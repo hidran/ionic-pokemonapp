@@ -10,6 +10,7 @@ import {PokemonApiService} from '../services/pokemon-api.service';
 })
 export class FavoritePage implements OnInit {
 
+  public pageTitle = 'Favorite pokemons';
   pokemons$: Observable<Pokemon[]>;
 
   constructor(private pokService: PokemonApiService) {
@@ -19,6 +20,10 @@ export class FavoritePage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.pokemons$ = this.pokService.getFavoritePokemon();
+    this.pokemons$ = this.pokService.getFavoritePokemon('');
+  }
+
+  filterPokemons($event) {
+    this.pokemons$ = this.pokService.getFavoritePokemon($event.target.value);
   }
 }
