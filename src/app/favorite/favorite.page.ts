@@ -12,6 +12,7 @@ export class FavoritePage implements OnInit {
 
   public pageTitle = 'Favorite pokemons';
   pokemons$: Observable<Pokemon[]>;
+  public isFavoritePage = true;
 
   constructor(private pokService: PokemonApiService) {
   }

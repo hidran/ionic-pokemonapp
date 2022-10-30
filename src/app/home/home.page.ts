@@ -13,6 +13,8 @@ export class HomePage implements OnInit {
 
   pokemons$: Observable<Pokemon[]>;
   public pageTitle = 'POKEMONS';
+  public isFavoritePage = false;
+  public favorites: Pokemon[];
   private loading: any;
 
   constructor(public pokService: PokemonApiService,
@@ -25,6 +27,7 @@ export class HomePage implements OnInit {
   async ngOnInit() {
     this.loading = await this.presentLoading();
     await this.loading.present();
+    this.favorites = await this.pokService.getFavoritePokemon('').toPromise();
     this.pokemons$ = this.pokService.getPokemons('');
     this.pokemons$.subscribe(() => {
       this.loading.dismiss();
@@ -43,9 +46,14 @@ export class HomePage implements OnInit {
     this.pokemons$ = this.pokService.getPokemons($event.target.value);
   }
 
+  public isPokFavorite(pok: Pokemon) {
+    const poks = this.favorites.filter(fPok => fPok.name === pok.name);
+    return poks.length > 0;
+  }
+
   async favorite(pok: Pokemon) {
 
-    const result = await this.pokService.addPokemonToFavorite(pok, false);
+    const result = await this.pokService.addPokemonToFavorite(pok, this.isPokFavorite(pok));
   }
 
   share(pok: Pokemon) {
