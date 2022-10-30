@@ -26,4 +26,15 @@ export class FavoritePage implements OnInit {
   filterPokemons($event) {
     this.pokemons$ = this.pokService.getFavoritePokemon($event.target.value);
   }
+
+  populateFavorite() {
+    this.pokemons$ = this.pokService.getFavoritePokemon('');
+
+  }
+
+  async favorite(pok: Pokemon) {
+
+    await this.pokService.addPokemonToFavorite(pok, true);
+    this.populateFavorite();
+  }
 }

@@ -43,6 +43,15 @@ export class HomePage implements OnInit {
     this.pokemons$ = this.pokService.getPokemons($event.target.value);
   }
 
+  async favorite(pok: Pokemon) {
+
+    const result = await this.pokService.addPokemonToFavorite(pok, false);
+  }
+
+  share(pok: Pokemon) {
+
+  }
+
   clearFilter($event) {
 
   }
