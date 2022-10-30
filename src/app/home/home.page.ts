@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {PokemonApiService} from '../services/pokemon-api.service';
-import {Pokemon} from '../models/Pokemon';
+import { Component, OnInit } from '@angular/core';
+import { PokemonApiService } from '../services/pokemon-api.service';
+import { Pokemon } from '../models/Pokemon';
 
 @Component({
   selector: 'app-home',
@@ -9,16 +9,15 @@ import {Pokemon} from '../models/Pokemon';
 })
 export class HomePage implements OnInit {
 
-  pokemons: Pokemon[];
+  pokemons : Pokemon[];
 
-  constructor(public pokService: PokemonApiService) {
-  }
+  constructor( public pokService: PokemonApiService) { }
 
   ngOnInit() {
-    this.pokService.getPokemons().subscribe(res => {
+     this.pokService.getPokemons().subscribe(res => {
 
-      this.pokemons = res;
-    });
+      this.pokemons =res;
+     });
   }
 
 }
