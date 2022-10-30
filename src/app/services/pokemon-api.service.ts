@@ -47,17 +47,30 @@ export class PokemonApiService {
     return this.http.get<IPokemonData>(url);
   }
 
-  async addPokemonToFavorite(pok: Pokemon) {
-    const data: Pokemon[] = await this.storage.get(POKEMON_FAVORITE) ?? [];
+  async addPokemonToFavorite(pok: Pokemon, isFavorite: boolean) {
 
-    if (data.includes(pok)) {
+    let data: Pokemon[] = await this.storage.get(POKEMON_FAVORITE) ?? [];
+
+    if (!isFavorite && data.some((res) => +res.id === +pok.id)) {
       return;
     }
-    data.push(pok);
+    if (!isFavorite) {
+      data.push(pok);
+    } else {
+      data = data.filter(res => res.id !== pok.id);
+    }
     return await this.storage.set(POKEMON_FAVORITE, data);
   }
 
   getFavoritePokemon(): Observable<Pokemon[]> {
     return from(this.storage.get(POKEMON_FAVORITE));
+  }
+
+  async isPokemonFavorite(pok: Pokemon) {
+    const data: Pokemon[] = await this.storage.get(POKEMON_FAVORITE) ?? [];
+    if (data.length === 0) {
+      return false;
+    }
+    return data.some((res) => +res.id === +pok.id);
   }
 }

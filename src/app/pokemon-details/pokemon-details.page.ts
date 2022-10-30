@@ -16,6 +16,7 @@ export class PokemonDetailsPage implements OnInit {
 
   public pokemon: Pokemon;
   public pokemonData$: Observable<IPokemonData>;
+  isFavorite: boolean;
   private id: number;
 
   constructor(private router: ActivatedRoute,
@@ -25,26 +26,31 @@ export class PokemonDetailsPage implements OnInit {
   ) {
   }
 
-  async ngOnInit() {
+  ngOnInit() {
+  }
+
+  async ionViewWillEnter() {
 
     const loading = await this.loadingCtrl.create({
 
       message: 'Please wait...'
 
     });
+
     await loading.present();
     const id = +this.router.snapshot.paramMap.get('id');
     this.id = id;
     const name = this.router.snapshot.queryParamMap.get('name');
     this.pokemon = new Pokemon({name, url: environment.pokImgUrl + id + '/'});
+    this.isFavorite = await this.pokService.isPokemonFavorite(this.pokemon);
     this.pokemonData$ = this.pokService.getPokemonData(id);
     this.pokemonData$.subscribe(() => loading.dismiss());
   }
 
   async addToFavorite() {
-    const result = await this.pokService.addPokemonToFavorite(this.pokemon);
+    const result = await this.pokService.addPokemonToFavorite(this.pokemon, this.isFavorite);
 
-    this.route.navigate(['/pokemons/favorites']);
+    await this.route.navigate(['/pokemons/favorites']);
 
   }
 

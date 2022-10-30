@@ -26,7 +26,7 @@
     </ion-row>
     <ion-row>
       <ion-col class="ion-text-center" size="6">
-        <ion-button (click)="addToFavorite()" color="danger">
+        <ion-button (click)="addToFavorite()" [color]="isFavorite? 'danger':''">
           <ion-icon name="heart"></ion-icon>
         </ion-button>
 
