@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {PokemonApiService} from '../services/pokemon-api.service';
 import {Pokemon} from '../models/Pokemon';
 import {Observable} from 'rxjs';
-import {LoadingController} from '@ionic/angular';
+import {IonList, LoadingController} from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -11,6 +11,7 @@ import {LoadingController} from '@ionic/angular';
 })
 export class HomePage implements OnInit {
 
+  @ViewChild(IonList) pokList: IonList;
   pokemons$: Observable<Pokemon[]>;
   public pageTitle = 'POKEMONS';
   public isFavoritePage = false;
@@ -53,7 +54,8 @@ export class HomePage implements OnInit {
 
   async favorite(pok: Pokemon) {
 
-    const result = await this.pokService.addPokemonToFavorite(pok, this.isPokFavorite(pok));
+    await this.pokService.addPokemonToFavorite(pok, this.isPokFavorite(pok));
+    await this.pokList.closeSlidingItems();
   }
 
   share(pok: Pokemon) {
