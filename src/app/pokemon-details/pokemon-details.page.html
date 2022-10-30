@@ -25,6 +25,19 @@
 
     </ion-row>
     <ion-row>
+      <ion-col class="ion-text-center" size="6">
+        <ion-button (click)="addToFavorite()" color="danger">
+          <ion-icon name="heart"></ion-icon>
+        </ion-button>
+
+      </ion-col>
+      <ion-col class="ion-text-center" size="6">
+        <ion-button (click)="share()">
+          <ion-icon name="share"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-margin-top">
       <ion-col size="12">
         <ion-list lines="true">
           <ion-list-header color="danger">
